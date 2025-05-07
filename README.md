@@ -2,27 +2,80 @@
 
 [Gitstar ranking](https://gitstar-ranking.com/repositories) là một trang web thú vị để thống kê các trang được đánh giá sao nhiều nhất trên Github. Nhiệm vụ trong bài này là dựng một crawler có thể thu thập được thông tin các bản release của 5000 repository nhiều sao nhất Github.
 
-## Gợi ý triển khai
+## 🚀 Hướng dẫn cài đặt
 
-Ngoài cách crawl trên trang chủ, có thể sử dụng [API này](https://docs.github.com/en/rest) để thu thập dữ liệu cần sử dụng. Các bạn có thể dùng các công cụ như [scrapy](https://scrapy.org/) (Python), [cheerio](https://github.com/cheeriojs/cheerio) (NodeJS), [Selenium](https://www.selenium.dev/), v.v.
+### 1. Clone repository
 
-Các trang web trên có thể chặn lưu lượng truy cập bất thường dù dùng thông qua API chính chủ, với vấn đề này có thể sử dụng proxy, VPN hoặc Tor, v.v.
+```bash
+git clone <your-repo-url>
+cd <ten-thu-muc-repo>
+```
 
-## Dữ liệu
+### 2. Di chuyển vào thư mục thực nghiệm muốn chạy
 
-Các thông tin cần thu thập bao gồm tên bản release, nội dung release và các commit thay đổi trong bản release đó. Schema của cơ sở dữ liệu mẫu nằm trong file `db.sql`.
+```bash
+cd <1 trong 4 foler>
+```
 
-## Yêu cầu triển khai
+### 3. Khởi tạo dữ liệu
 
-| Mức độ | Mô tả |
-|--|--|
-| ![Static Badge](https://img.shields.io/badge/REQUIRED-easy-green) | Triển khai được crawler cơ bản, thu thập tự động (có thể bị chặn) |
-| ![Static Badge](https://img.shields.io/badge/REQUIRED-easy-green) | Đánh giá và nêu nguyên nhân của các vấn đề gặp phải |
-| ![Static Badge](https://img.shields.io/badge/REQUIRED-hard-red) | Cải tiến và so sánh hiệu năng với phiên bản ban đầu |
-| ![Static Badge](https://img.shields.io/badge/OPTIONAL-easy-green) | Tối ưu quá trình đọc ghi database |
-| ![Static Badge](https://img.shields.io/badge/OPTIONAL-medium-yellow) | Song song hoá (đa luồng) quá trình crawl |
-| ![Static Badge](https://img.shields.io/badge/OPTIONAL-medium-yellow) | Giải quyết vấn đề crawler bị trang web chặn khi truy cập quá nhiều bằng một số kỹ thuật hoặc design pattern tương ứng |
-| ![Static Badge](https://img.shields.io/badge/OPTIONAL-medium-yellow) | Đánh giá các giải pháp tối ưu khác nhau |
+Trong thư mục thực nghiệm thường có một thư mục `setup-data` hoặc mục tên khác nhưng có docker-compose file là được
+
+```bash
+cd setup-data
+docker-compose up
+```
+
+Sau khi xong, quay lại thư mục thực nghiệm:
+
+```bash
+cd ..
+go run cmd/main.go
+```
+
+Lệnh trên sẽ khởi chạy server tại `localhost:<port>`.
+
+---
+
+## 📡 API có sẵn
+
+Sau khi server khởi động, bạn có thể gọi các API như sau:
+
+### Repositories
+- `GET /api/repos/crawl`: crawl toàn bộ repositories
+- `GET /api/repos/{repoID}`: lấy thông tin một repository
+
+### Releases
+- `GET /api/releases/crawl`: crawl toàn bộ releases
+- `GET /api/releases/{releaseID}`: lấy thông tin một release
+- `GET /api/releases/{releaseID}/commits`: crawl commit theo release
+
+### Commits
+- `GET /api/commits/crawl`: crawl toàn bộ commits
+- `GET /api/commits/{commitID}`: lấy thông tin một commit
+
+---
+
+## 📝 Lưu ý
+
+- Log hệ thống được lưu tại thư mục `logs` trong từng thực nghiệm.
+  
+## ⚙️ Công nghệ sử dụng
+
+- **Go (Golang)**: ngôn ngữ lập trình chính để xây dựng server và các thành phần logic
+- **[Colly](https://github.com/gocolly/colly)**: thư viện crawler mạnh mẽ cho Go
+- **[Chi Router](https://github.com/go-chi/chi)**: router HTTP nhẹ và nhanh
+- **[Logrus](https://github.com/sirupsen/logrus)**: logging framework
+- **[Viper](https://github.com/spf13/viper)**: quản lý cấu hình ứng dụng
+- **[GORM](https://gorm.io/)**: ORM tương tác với cơ sở dữ liệu
+- **Docker Compose**: phục vụ việc khởi tạo cơ sở dữ liệu dễ dàng qua `setup-data`
+
+## 🧱 Kiến trúc & thiết kế
+
+- **Queue-Based Load Leveling**: dữ liệu được đưa vào hàng đợi (queue) thay vì ghi trực tiếp vào DB, giúp tăng tốc độ crawl và giảm tải cho DB
+- **Circuit Breaker Pattern**
+
+---
   
 # Solution
 
@@ -55,11 +108,11 @@ Các thông tin cần thu thập bao gồm tên bản release, nội dung releas
       <td>5000</td>
       <td>17.783</td>
       <td>0%</td>
-      <td>24570</td>
-      <td>2h47</td>
+      <td>1890</td>
+      <td>1h53</td>
       <td>0%</td>
-      <td>35892</td>
-      <td>1h35</td>
+      <td>_</td>
+      <td>_</td>
       <td>0%</td>
     </tr>
     <tr>
