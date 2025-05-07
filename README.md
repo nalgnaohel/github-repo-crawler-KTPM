@@ -59,7 +59,23 @@ Sau khi server khởi động, bạn có thể gọi các API như sau:
 ## 📝 Lưu ý
 
 - Log hệ thống được lưu tại thư mục `logs` trong từng thực nghiệm.
+  
+## ⚙️ Công nghệ sử dụng
 
+- **Go (Golang)**: ngôn ngữ lập trình chính để xây dựng server và các thành phần logic
+- **[Colly](https://github.com/gocolly/colly)**: thư viện crawler mạnh mẽ cho Go
+- **[Chi Router](https://github.com/go-chi/chi)**: router HTTP nhẹ và nhanh
+- **[Logrus](https://github.com/sirupsen/logrus)**: logging framework
+- **[Viper](https://github.com/spf13/viper)**: quản lý cấu hình ứng dụng
+- **[GORM](https://gorm.io/)**: ORM tương tác với cơ sở dữ liệu
+- **Docker Compose**: phục vụ việc khởi tạo cơ sở dữ liệu dễ dàng qua `setup-data`
+
+## 🧱 Kiến trúc & thiết kế
+
+- **Queue-Based Load Leveling**: dữ liệu được đưa vào hàng đợi (queue) thay vì ghi trực tiếp vào DB, giúp tăng tốc độ crawl và giảm tải cho DB
+- **Circuit Breaker Pattern** *(đang áp dụng hoặc hướng tới)*: giúp ứng dụng ổn định hơn khi gặp lỗi liên tục từ các hệ thống bên ngoài như API GitHub
+
+---
   
 # Solution
 
