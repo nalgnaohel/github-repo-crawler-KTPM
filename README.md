@@ -73,7 +73,7 @@ Sau khi server khởi động, bạn có thể gọi các API như sau:
 ## 🧱 Kiến trúc & thiết kế
 
 - **Queue-Based Load Leveling**: dữ liệu được đưa vào hàng đợi (queue) thay vì ghi trực tiếp vào DB, giúp tăng tốc độ crawl và giảm tải cho DB
-- **Circuit Breaker Pattern** *(đang áp dụng hoặc hướng tới)*: giúp ứng dụng ổn định hơn khi gặp lỗi liên tục từ các hệ thống bên ngoài như API GitHub
+- **Circuit Breaker Pattern**
 
 ---
   
