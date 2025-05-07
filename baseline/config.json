@@ -1,0 +1,37 @@
+{
+    "app": {
+      "name": "golang-clean-architecture"
+    },
+    "web": {
+      "prefork": false,
+      "port": 3000
+    },
+    "log": {
+      "level": 6
+    },
+    "database": {
+      "username": "ktpmuser",
+      "password": "123455",
+      "host": "0.0.0.0",
+      "port": 5432,
+      "name": "ktpmdb",
+      "pool": {
+        "idle": 10,
+        "max": 100,
+        "lifetime": 300
+      }
+    },
+    "kafka": {
+      "bootstrap": {
+        "servers": "localhost:9092"
+      },
+      "group": {
+        "id": "golang-clean-architecture"
+      },
+      "auto": {
+        "offset": {
+          "reset": "earliest"
+        }
+      }
+    }
+  }

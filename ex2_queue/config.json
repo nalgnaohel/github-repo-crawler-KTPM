@@ -1,0 +1,39 @@
+{
+  "app": {
+    "name": "golang-clean-architecture"
+  },
+  "web": {
+    "prefork": false,
+    "port": 3001
+  },
+  "log": {
+    "level": 6
+  },
+  "database": {
+    "username": "ktpmuser1",
+    "password": "123455",
+    "host": "0.0.0.0",
+    "port": 5433,
+    "name": "ktpmdb1",
+    "pool": {
+      "idle": 10,
+      "max": 100,
+      "lifetime": 300
+    }
+  },
+  "queue": {
+    "max_size": 10000,
+    "workers": {
+      "release": 4,
+      "commit": 4
+    },
+    "batch_size": {
+      "min": 5,
+      "max": 100
+    },
+    "retry": {
+      "max_attempts": 3,
+      "delay_ms": 1000
+    }
+  }
+}

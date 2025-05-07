@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS repositories (
+	id SERIAL PRIMARY KEY,
+	userName TEXT NOT NULL,
+	repoName TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS releases (
+	id SERIAL PRIMARY KEY,
+	tagName TEXT NOT NULL,
+	content TEXT NOT NULL,
+	repoID INTEGER NOT NULL,
+	FOREIGN KEY (repoID) REFERENCES repositories(id)
+);
+
+CREATE TABLE IF NOT EXISTS commits (
+	id SERIAL PRIMARY KEY,
+	hash TEXT NOT NULL,
+	message TEXT NOT NULL,
+	releaseID INTEGER NOT NULL,
+	FOREIGN KEY (releaseID) REFERENCES releases(id)
+);
