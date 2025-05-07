@@ -53,37 +53,49 @@ Các thông tin cần thu thập bao gồm tên bản release, nội dung releas
     <tr>
       <td>Baseline</td>
       <td>5000</td>
-      <td>1 200</td>
+      <td>17.783s</td>
       <td>0%</td>
-      <td>100%</td>
-      <td>6</td>
+      <td>24570</td>
+      <td>2h47</td>
       <td>0%</td>
-      <td>100%</td>
-      <td>7</td>
+      <td>35892</td>
+      <td>1h35</td>
       <td>0%</td>
     </tr>
     <tr>
       <td>Exp 1</td>
-      <td>100%</td>
+      <td>5000</td>
       <td>5.3</td>
       <td>0%</td>
-      <td>100%</td>
-      <td>6.6</td>
+      <td>45837</td>
+      <td>15p34</td>
       <td>0%</td>
-      <td>100%</td>
-      <td>7</td>
+      <td>36822</td>
+      <td>13p56</td>
       <td>0%</td>
     </tr>
     <tr>
       <td>Exp 2</td>
-      <td>100%</td>
+      <td>5000</td>
       <td>4.3</td>
       <td>0%</td>
-      <td>100%</td>
-      <td>6</td></td>
+      <td>25690</td>
+      <td>8p28</td>
       <td>0%</td>
-      <td>100%</td>
-      <td>7</td>
+      <td>37682</td>
+      <td>12p55</td>
+      <td>0%</td>
+    </tr>
+    <tr>
+      <td>Exp 3</td>
+      <td>5000</td>
+      <td>6.5</td>
+      <td>0%</td>
+      <td>9835</td>
+      <td>6p28</td>
+      <td>0%</td>
+      <td>6570</td>
+      <td>4p14</td>
       <td>0%</td>
     </tr>
   </tbody>
