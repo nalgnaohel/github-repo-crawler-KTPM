@@ -14,12 +14,12 @@ cd <ten-thu-muc-repo>
 ### 2. Di chuyển vào thư mục thực nghiệm muốn chạy
 
 ```bash
-cd experiments/ten-thuc-nghiem
+cd <1 trong 4 foler>
 ```
 
 ### 3. Khởi tạo dữ liệu
 
-Trong thư mục thực nghiệm thường có một thư mục `setup-data`. Bạn có thể vào đó và chạy:
+Trong thư mục thực nghiệm thường có một thư mục `setup-data` hoặc mục tên khác nhưng có docker-compose file là được
 
 ```bash
 cd setup-data
