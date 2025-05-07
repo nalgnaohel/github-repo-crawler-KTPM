@@ -108,11 +108,11 @@ Sau khi server khởi động, bạn có thể gọi các API như sau:
       <td>5000</td>
       <td>17.783</td>
       <td>0%</td>
-      <td>24570</td>
-      <td>2h47</td>
+      <td>1890</td>
+      <td>1h53</td>
       <td>0%</td>
-      <td>35892</td>
-      <td>1h35</td>
+      <td>_</td>
+      <td>_</td>
       <td>0%</td>
     </tr>
     <tr>
