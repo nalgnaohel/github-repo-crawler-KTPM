@@ -53,7 +53,7 @@ Các thông tin cần thu thập bao gồm tên bản release, nội dung releas
     <tr>
       <td>Baseline</td>
       <td>5000</td>
-      <td>17.783s</td>
+      <td>17.783</td>
       <td>0%</td>
       <td>24570</td>
       <td>2h47</td>
