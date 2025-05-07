@@ -102,10 +102,19 @@ Các thông tin cần thu thập bao gồm tên bản release, nội dung releas
 </table>
 
 # Mô tả từng thử nghiệm
+
 ## Baseline
+
 Baseline là một crawler siêu đơn giản, chỉ có thể cào dữ liệu đơn thuần tự động, mà chưa có bất kỳ xử lý giúp tối ưu về mặt thời gian và lượng dữ liệu crawled được. 
+
 Các vấn đề baseline này gặp phải:
-- 
+- Database gặp quá nhiều truy vấn ghi -> nghẽn
+- Tốc độ crawl dữ liệu về rất chậm do qúa nhiều truy vấn ghi mà mỗi lần chỉ ghi vào được có 1 record của dữ liệu
+- Data crawled về không được nhiều do nghẽn tắc xảy ra
+
+Các nguyên nhân dẫn đến những vấn đề trên:
+- Thao tác ghi vào database chưa tối ưu
+- Chưa sử dụng các cơ chế giúp crawl nhiều luồng dữ liệu cùng lúc
 
 ## Exp 1
 Crawl đa luồng (thực nghiệm 4 - 10 luồng), đồng thời sử dụng batch để cho phép ghi batch 100 records cùng 1 lúc.
@@ -117,18 +126,34 @@ Crawl đa luồng (thực nghiệm 4 - 10 luồng), đồng thời sử dụng b
    - Nếu một luồng bị block (timeout, delay), các luồng khác vẫn tiếp tục hoạt động, ngăn tình trạng “điểm chết” toàn bộ quá trình crawl so với việc chỉ sử dụng mỗi 1 luồng như baseline.
 
 4. **Giảm số lượng truy vấn DB nhờ batch insert**  
-   - Gom 100 kết quả crawl vào một lô (batch) trước khi gọi `INSERT`/`COPY` một lần.  
-   - Sử dụng transaction đảm bảo tính nhất quán của dữ liệu
+   - Gom 100 kết quả crawl vào một lô (batch) trước khi một thao tác ghi  
+   - Sử dụng transaction đảm bảo tính nhất quán của dữ liệu trong quá trình crawl và insert lượng lớn data từ crawler
 
 5. **Tăng tốc độ ghi & giảm latency tail**  
-   - Việc ghi 100 bản ghi cùng lúc tận dụng tốt I/O throughput, giảm IOPS so với ghi rải rác từng bản ghi.  
-   - Giảm thời gian chờ đợi cho mỗi lô dữ liệu, giúp crawler không phải chờ quá lâu giữa các batch.
+   - Ghi 100 bản ghi cùng lúc tận dụng tốt I/O throughput.  
+   - Giảm thời gian chờ đợi cho mỗi batch dữ liệu, giúp crawler không phải chờ quá lâu giữa các batch.
 
 ## Exp 2
-Crawl dùng queue, các data crawl cào về được nhét vào queue để đợi khi nào database rảnh thì sẽ thực hiện ghi vào db.
+Crawl dùng queue, các data crawl cào về được nhét vào queue để đợi khi nào database rảnh thì sẽ thực hiện ghi vào db, đồng thời cũng áp dụng cơ chế batch-insert như pipeline 1
 => Các cải tiến đạt được:
 1. **Tăng throughput cho crawler**  
    - Crawler chỉ cần đẩy kết quả vào queue mà không phải chờ ghi xong vào DB => Giảm thời gian chờ, việc crawl được thực hiện liên tục từ đó giảm thời gian crawl xuống  
 
 2. **Điều tiết tải (Back‑pressure)**  
-   - Queue lưu trữ lượng data chờ ghi. Khi DB bận, consumer giảm tốc độ ghi tự động, crawler vẫn tiếp tục (đến ngưỡng queue).  
+   - Queue lưu trữ lượng data chờ ghi. Khi DB bận, consumer giảm tốc độ ghi tự động, crawler vẫn tiếp tục (đến ngưỡng queue).
+
+3. **Giảm số lượng truy vấn DB nhờ batch insert và tăng tốc độ ghi** (Lý do tương tự exp 1 vì sử dụng batch-inserted)
+
+## Exp 3
+Áp dụng Circuit Breaker
+=> Các cải tiến:
+1. **Tránh sự cố**  
+   - Trong trường server đích liên tục response lỗi, cơ chế Circuit Breaker sẽ bảo vệ các API không bị gọi liên tục => Crawler không bị sập hoàn toàn
+   - Sau một khoảng thời gian thì crawler có thể tự phục hồi được nhờ cơ chế half-open của Circuit Breaker
+
+2. **Tăng độ ổn định và hiệu suất của hệ thống**
+   - Circuit Breaker luôn giữ cho 3 API không bị sập (như trên đã giải thích)
+   - Crawler bỏ qua những request lỗi => Tiết kiệm thời gian crawl
+     
+3. **Giảm số lượng truy vấn DB nhờ batch insert và tăng tốc độ ghi** (Lý do tương tự exp 1 vì sử dụng batch-inserted)
+
